@@ -15,3 +15,21 @@ def test_calculate_heart_rate(target_heart_rate, hertz, expected):
         target_heart_rate=target_heart_rate,
         hertz=hertz
     ) == expected
+
+
+@pytest.mark.parametrize(
+    "steps_per_beat, target_phase_fraction, expected",
+    [
+        (100, 0.1, (10, 0.1)),
+        (100, 0.101, (10, 0.1)),
+    ]
+)
+def test_calculate_steps_in_phase(
+    steps_per_beat,
+    target_phase_fraction,
+    expected
+):
+    assert synthetic.calculate_steps_in_phase(
+        steps_per_beat=steps_per_beat,
+        target_phase_fraction=target_phase_fraction
+    ) == expected
