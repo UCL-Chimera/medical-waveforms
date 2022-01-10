@@ -12,6 +12,9 @@ numpy = "^1.21.4"
 [tool.poetry.dev-dependencies]
 pytest = "^6.2.5"
 ipykernel = "^6.6.0"
+matplotlib = "^3.5.1"
+scipy = "^1.7.3"
+statsmodels = "^0.13.1"
 
 [build-system]
 requires = ["poetry-core>=1.0.0"]
