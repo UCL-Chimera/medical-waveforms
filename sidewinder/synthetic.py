@@ -2,8 +2,8 @@ def calculate_heart_rate(
     target_heart_rate: float,
     hertz: float
 ) -> (int, float):
-    """Adjusts the heart rate from a target heart rate, so that one cardiac
-        cycle fits exactly within a whole number of timesteps.
+    """Adjusts the target heart rate so that one cardiac cycle fits exactly
+        within a whole number of timesteps.
 
     Args:
         target_heart_rate: Target heart rate (BPM)
