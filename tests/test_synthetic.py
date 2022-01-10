@@ -10,8 +10,8 @@ from sidewinder import synthetic
         (60.1, 60, (60, 60.)),
     ]
 )
-def test_adjust_target_heart_rate(target_heart_rate, hertz, expected):
-    assert synthetic.adjust_target_heart_rate(
+def test_calculate_heart_rate(target_heart_rate, hertz, expected):
+    assert synthetic.calculate_heart_rate(
         target_heart_rate=target_heart_rate,
         hertz=hertz
     ) == expected

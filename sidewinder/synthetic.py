@@ -1,7 +1,7 @@
-def adjust_target_heart_rate(
+def calculate_heart_rate(
     target_heart_rate: float,
     hertz: float
-) -> (float, int):
+) -> (int, float):
     """Adjusts the heart rate from a target heart rate, so that one cardiac
         cycle fits exactly within a whole number of timesteps.
 
