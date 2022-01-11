@@ -42,13 +42,14 @@ def make_generator_timestamps_and_inputs(
     Returns:
         Timestamps (seconds)
         Inputs. The units are such that 0 is the start of the generated
-            waveform and 1 is the end.  # TODO: Check whether this is correct
+            waveform and 1 is the end.
     """
     seconds_per_cycle = 60. / cycles_per_minute
     dt = 1 / hertz
-    n_samples = round((seconds_per_cycle / dt) * n_cycles_target)
+    fractional_samples_per_cycle = seconds_per_cycle / dt
+    n_samples = round(fractional_samples_per_cycle * n_cycles_target)
     n_seconds = n_samples * dt
-    n_cycles_actual = n_samples * (seconds_per_cycle / dt)
+    n_cycles_actual = n_samples / fractional_samples_per_cycle
     n_cycle_starts = math.ceil(n_cycles_actual)
 
     start_times = np.zeros(n_cycle_starts)
@@ -72,13 +73,13 @@ def make_generator_timestamps_and_inputs(
     def cycle_timestamps(cycle_i: int) -> np.ndarray:
         return np.linspace(
             start=0,
-            stop=(samples_per_cycle[cycle_i] - 1) / hertz,  # TODO: Check this
+            stop=(samples_per_cycle[cycle_i] - 1) / hertz,
             num=samples_per_cycle[cycle_i]
         ) + offsets[cycle_i]
 
     inputs = np.concatenate([
         cycle_timestamps(cycle_i) for cycle_i in range(n_cycle_starts)
-    ])
+    ]) / seconds_per_cycle
 
     return timestamps, inputs
 
@@ -100,4 +101,17 @@ def generate_arterial_pressure_waveform(
     )
     generator = make_waveform_generator_from_file(waveform_filepath)
 
+    timestamps, inputs = make_generator_timestamps_and_inputs(
+        cycles_per_minute=heart_rate,
+        n_cycles_target=n_beats_target,
+        hertz=hertz
+    )
+    waveform = generator(inputs)
 
+    # Scale
+    waveform -= waveform.min()
+    waveform /= waveform.max()
+    waveform *= (systolic_pressure - diastolic_pressure)
+    waveform += diastolic_pressure
+
+    return timestamps, waveform
