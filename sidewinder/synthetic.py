@@ -2,6 +2,7 @@ import os
 import math
 
 import numpy as np
+import pandas as pd
 from scipy import interpolate
 
 from .utils import get_root_directory
@@ -41,8 +42,8 @@ def make_generator_timestamps_and_inputs(
 
     Returns:
         Timestamps (seconds)
-        Inputs. The units are such that 0 is the start of the generated
-            waveform and 1 is the end.
+        Inputs. The units are standardised such that 0 is the start of the
+            generated waveform and 1 is the end.
     """
     seconds_per_cycle = 60. / cycles_per_minute
     dt = 1 / hertz
@@ -90,9 +91,29 @@ def synthetic_arterial_pressure_data(
     heart_rate: float,
     n_beats_target: float,
     hertz: float
-) -> (np.ndarray, np.ndarray):
+) -> pd.DataFrame:
+    """Make synthetic arterial pressure data.
+
+    Args:
+        systolic_pressure: Maximum systolic arterial pressure (mmHg)
+        diastolic_pressure: Minimum diastolic arterial pressure (mmHg)
+        heart_rate: Heart rate (beats per minute)
+        n_beats_target: Target number of heartbeats. Doesn't have to be an
+            integer. The number of beats actually generated will be slightly
+            different from the target unless each beat fits exactly within a
+            whole number of samples.
+        hertz: Sampling rate (hertz)
+
+    Returns:
+        Synthetic arterial pressure data with corresponding timestamps.
+    """
     assert systolic_pressure > diastolic_pressure
 
+    timestamps, inputs = make_generator_timestamps_and_inputs(
+        cycles_per_minute=heart_rate,
+        n_cycles_target=n_beats_target,
+        hertz=hertz
+    )
     waveform_filepath = os.path.join(
         get_root_directory(),
         'sidewinder',
@@ -100,12 +121,6 @@ def synthetic_arterial_pressure_data(
         'example_arterial_pressure_waveform.npy'
     )
     generator = make_waveform_generator_from_file(waveform_filepath)
-
-    timestamps, inputs = make_generator_timestamps_and_inputs(
-        cycles_per_minute=heart_rate,
-        n_cycles_target=n_beats_target,
-        hertz=hertz
-    )
     waveform = generator(inputs)
 
     # Scale
@@ -114,4 +129,4 @@ def synthetic_arterial_pressure_data(
     waveform *= (systolic_pressure - diastolic_pressure)
     waveform += diastolic_pressure
 
-    return timestamps, waveform
+    return pd.DataFrame({'time': timestamps, 'pressure': waveform})
