@@ -84,7 +84,7 @@ def make_generator_timestamps_and_inputs(
     return timestamps, inputs
 
 
-def generate_arterial_pressure_waveform(
+def synthetic_arterial_pressure_data(
     systolic_pressure: float,
     diastolic_pressure: float,
     heart_rate: float,
