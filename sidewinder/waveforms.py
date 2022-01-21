@@ -1,5 +1,6 @@
-from typing import Tuple
+from typing import Tuple, Dict
 
+import numpy as np
 import pandas as pd
 
 
@@ -15,8 +16,9 @@ class Waveforms:
         """
         self.waveforms = waveforms
         self.time_column_name = time_column_name
-        self.features = {}
         self._validate_arguments()
+        self.names = self._init_names()
+        self.features = self._init_features()
 
     def _validate_arguments(self):
         assert isinstance(self.waveforms, pd.DataFrame), (
@@ -27,10 +29,15 @@ class Waveforms:
             f"'{self.time_column_name}'"
         )
 
-    @property
-    def names(self) -> Tuple[str, ...]:
-        """The names of the waveform-containing columns in self.waveforms"""
+    def _init_names(self) -> Tuple[str, ...]:
+        """Makes a tuple of names of the waveform-containing columns in
+        self.waveforms"""
         return tuple(
             name for name in self.waveforms.columns
             if name is not self.time_column_name
         )
+
+    def _init_features(self) -> Dict[str, Dict[str, np.ndarray]]:
+        """Makes the holder for waveform features (the features themselves
+        haven't been derived yet)"""
+        return {name: {} for name in self.names}
