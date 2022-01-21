@@ -432,6 +432,18 @@ optional = false
 python-versions = ">=2.7, !=3.0.*, !=3.1.*, !=3.2.*, !=3.3.*, !=3.4.*"
 
 [[package]]
+name = "pyampd"
+version = "0.0.1"
+description = "Peak detection using AMPD and ASS-AMPD algorithms"
+category = "main"
+optional = false
+python-versions = "*"
+
+[package.dependencies]
+numpy = "*"
+scipy = "*"
+
+[[package]]
 name = "pycparser"
 version = "2.21"
 description = "C parser in Python"
@@ -638,7 +650,7 @@ testing = ["pytest (>=4.6)", "pytest-checkdocs (>=2.4)", "pytest-flake8", "pytes
 [metadata]
 lock-version = "1.1"
 python-versions = ">=3.7.1,<3.11"
-content-hash = "c5bfacbf7890960310c3259422a61d8a0b7880bffc034e6814065058120cfad0"
+content-hash = "e13cc28f1bb7c0508cd25ae14f1101c8a3c2e32e358dc1c28f7defecdb58c9f8"
 
 [metadata.files]
 appnope = [
@@ -999,6 +1011,10 @@ ptyprocess = [
 py = [
     {file = "py-1.11.0-py2.py3-none-any.whl", hash = "sha256:607c53218732647dff4acdfcd50cb62615cedf612e72d1724fb1a0cc6405b378"},
     {file = "py-1.11.0.tar.gz", hash = "sha256:51c75c4126074b472f746a24399ad32f6053d1b34b68d2fa41e558e6f4a98719"},
+]
+pyampd = [
+    {file = "pyampd-0.0.1-py2.py3-none-any.whl", hash = "sha256:d923a4372308d447b98cd80f935a059e29323777dd26c0ac131945ad84f5f89c"},
+    {file = "pyampd-0.0.1.tar.gz", hash = "sha256:e333d00b61d2844b0ed0383b010394e0a0cb384a036dd83960cdc647cf71a755"},
 ]
 pycparser = [
     {file = "pycparser-2.21-py2.py3-none-any.whl", hash = "sha256:8ee45429555515e1f6b185e78100aea234072576aa43ab53aefcae078162fca9"},
