@@ -1,3 +1,4 @@
+import numpy as np
 def closenessfinder(lseg):#Function to find the closest power of 2 to the segment size
 	pow2arr=[2**i for i in range (0,30)] #Array of powers of 2, cut off at 2**30
 	disarr=[lseg-i for i in pow2arr] 
@@ -21,9 +22,10 @@ def powerspec(ts,fs=1, ns=1, lseg=None):
 	dt=1./fs
 	psa=psa*dt
 	psa=psa/ns              #Normalisation
-	return(freq,psa) 	#Returns frequencies and power spectrum
+	return(freq,psa[0:len(freq)]) 	#Returns frequencies and power spectrum
 	
 
 def maxpeak(ts):#Returns frequency of the maximum peak
 	ps_t=powerspec(ts)
 	return(ps_t[0][np.argmax(ps_t[1])])
+
