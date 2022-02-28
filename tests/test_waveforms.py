@@ -28,4 +28,5 @@ class TestWaveforms:
         assert example_waveforms.names == ('signal',)
 
     def test_features(self, example_waveforms):
-        assert example_waveforms.features == {'signal': {}}
+        assert example_waveforms.waveform_features == {'signal': {}}
+        assert example_waveforms.cycle_features == {'signal': {}}

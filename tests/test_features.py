@@ -15,6 +15,6 @@ def test_find_troughs():
     w = waveforms.Waveforms(data)
     w = waveform.find_troughs(w, name='pressure')
     np.testing.assert_array_equal(
-        w.features['pressure']['troughs'],
+        w.waveform_features['pressure']['troughs'],
         np.array([0, 10, 20])
     )

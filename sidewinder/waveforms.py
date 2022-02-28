@@ -18,7 +18,8 @@ class Waveforms:
         self.time_column_name = time_column_name
         self._validate_arguments()
         self.names = self._init_names()
-        self.features = self._init_features()
+        self.waveform_features = self._init_features_container()
+        self.cycle_features = self._init_features_container()
 
     def _validate_arguments(self):
         assert isinstance(self.waveforms, pd.DataFrame), (
@@ -37,7 +38,7 @@ class Waveforms:
             if name is not self.time_column_name
         )
 
-    def _init_features(self) -> Dict[str, Dict[str, np.ndarray]]:
-        """Makes the holder for waveform features (the features themselves
-        haven't been derived yet)"""
+    def _init_features_container(self) -> Dict[str, Dict[str, np.ndarray]]:
+        """Makes a holder for features (the features themselves haven't been
+        derived yet)"""
         return {name: {} for name in self.names}
