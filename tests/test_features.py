@@ -36,9 +36,19 @@ def test_get_cycles(abp_waveforms_fixture):
     assert len(expected) == 2
     np.testing.assert_array_equal(
         expected[0].pressure.values,
-        abp_waveforms_fixture.waveforms.pressure.values[:10]
+        abp_waveforms_fixture.waveforms.pressure.values[:11]
     )
     np.testing.assert_array_equal(
         expected[1].pressure.values,
-        abp_waveforms_fixture.waveforms.pressure.values[10:20]
+        abp_waveforms_fixture.waveforms.pressure.values[10:21]
     )
+
+
+class TestDuration:
+    def test_extract_feature(self, abp_waveforms_fixture):
+        duration = cycle.Duration()
+        w = duration.extract_feature(abp_waveforms_fixture, 'pressure')
+        np.testing.assert_array_equal(
+            w.cycle_features['pressure']['Duration'],
+            np.array([1., 1.])
+        )
