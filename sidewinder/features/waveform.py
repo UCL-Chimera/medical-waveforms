@@ -3,7 +3,7 @@ from pyampd import ampd
 from ..waveforms import Waveforms
 
 
-def find_troughs(waveforms: Waveforms, name: str):
+def find_troughs(waveforms: Waveforms, name: str) -> Waveforms:
     """Finds indices of troughs in a waveform.
 
     Args:
