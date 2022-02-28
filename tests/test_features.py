@@ -35,10 +35,10 @@ def test_get_cycles(abp_waveforms_fixture):
     expected = cycle.get_cycles(abp_waveforms_fixture, 'pressure')
     assert len(expected) == 2
     np.testing.assert_array_equal(
-        expected[0],
+        expected[0].pressure.values,
         abp_waveforms_fixture.waveforms.pressure.values[:10]
     )
     np.testing.assert_array_equal(
-        expected[1],
+        expected[1].pressure.values,
         abp_waveforms_fixture.waveforms.pressure.values[10:20]
     )

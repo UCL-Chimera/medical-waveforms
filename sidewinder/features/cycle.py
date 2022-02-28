@@ -1,11 +1,11 @@
 from abc import ABC, abstractmethod
 
-import numpy as np
+import pandas as pd
 
 from ..waveforms import Waveforms
 
 
-def get_cycles(waveforms: Waveforms, name: str) -> [np.ndarray]:
+def get_cycles(waveforms: Waveforms, name: str) -> [pd.DataFrame]:
     """Makes a list of the individual cycles from a waveform. This is useful
         for per-cycle feature extraction
 
@@ -14,10 +14,10 @@ def get_cycles(waveforms: Waveforms, name: str) -> [np.ndarray]:
         name: Name of column in `waveforms` to get cycles for
 
     Returns:
-        Each element is a cycle (e.g. a heartbeat)
+        Each element contains data from one cycle (e.g. a heartbeat)
     """
     return [
-        waveforms.waveforms[name].values[
+        waveforms.waveforms.iloc[
             waveforms.waveform_features[name]['troughs'][cycle_i]:
             waveforms.waveform_features[name]['troughs'][cycle_i + 1]
         ] for cycle_i in range(
