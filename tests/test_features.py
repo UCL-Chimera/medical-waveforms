@@ -1,6 +1,7 @@
 import numpy as np
 
-from sidewinder import synthetic, waveforms, features
+from sidewinder import synthetic, waveforms
+from sidewinder.features import waveform
 
 
 def test_find_troughs():
@@ -12,7 +13,7 @@ def test_find_troughs():
         hertz=10.
     )
     w = waveforms.Waveforms(data)
-    w = features.find_troughs(w, name='pressure')
+    w = waveform.find_troughs(w, name='pressure')
     np.testing.assert_array_equal(
         w.features['pressure']['troughs'],
         np.array([0, 10, 20])
