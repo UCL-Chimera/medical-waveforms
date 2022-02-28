@@ -1,6 +1,6 @@
 from pyampd import ampd
 
-from sidewinder.waveforms import Waveforms
+from ..waveforms import Waveforms
 
 
 def find_troughs(waveforms: Waveforms, name: str):
