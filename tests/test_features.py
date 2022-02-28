@@ -3,7 +3,7 @@ import numpy as np
 import pandas as pd
 
 from sidewinder import synthetic, waveforms
-from sidewinder.features import waveform
+from sidewinder.features import waveform, cycle
 
 
 @pytest.fixture(scope='function')
@@ -28,4 +28,17 @@ def test_find_troughs(abp_waveforms_fixture):
     np.testing.assert_array_equal(
         abp_waveforms_fixture.waveform_features['pressure']['troughs'],
         np.array([0, 10, 20])
+    )
+
+
+def test_get_cycles(abp_waveforms_fixture):
+    expected = cycle.get_cycles(abp_waveforms_fixture, 'pressure')
+    assert len(expected) == 2
+    np.testing.assert_array_equal(
+        expected[0],
+        abp_waveforms_fixture.waveforms.pressure.values[:10]
+    )
+    np.testing.assert_array_equal(
+        expected[1],
+        abp_waveforms_fixture.waveforms.pressure.values[10:20]
     )
