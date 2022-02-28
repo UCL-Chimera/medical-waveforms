@@ -19,12 +19,13 @@ def abp_data_fixture() -> pd.DataFrame:
 
 @pytest.fixture(scope='function')
 def abp_waveforms_fixture(abp_data_fixture) -> waveforms.Waveforms:
-    return waveforms.Waveforms(abp_data_fixture)
+    w = waveforms.Waveforms(abp_data_fixture)
+    w = waveform.find_troughs(w, name='pressure')
+    return w
 
 
 def test_find_troughs(abp_waveforms_fixture):
-    w = waveform.find_troughs(abp_waveforms_fixture, name='pressure')
     np.testing.assert_array_equal(
-        w.waveform_features['pressure']['troughs'],
+        abp_waveforms_fixture.waveform_features['pressure']['troughs'],
         np.array([0, 10, 20])
     )
