@@ -21,10 +21,13 @@ def get_cycles(waveforms: Waveforms, name: str) -> [pd.DataFrame]:
     """
     return [
         waveforms.waveforms.iloc[
-            waveforms.waveform_features[name]['troughs'][cycle_i]:
-            waveforms.waveform_features[name]['troughs'][cycle_i + 1] + 1
-        ] for cycle_i in range(
-            waveforms.waveform_features[name]['troughs'].size - 1
+            waveforms.waveform_features[name]["troughs"][
+                cycle_i
+            ] : waveforms.waveform_features[name]["troughs"][cycle_i + 1]
+            + 1
+        ]
+        for cycle_i in range(
+            waveforms.waveform_features[name]["troughs"].size - 1
         )
     ]
 
@@ -57,10 +60,11 @@ class CycleFeatureExtractor(ABC):
 
 class Duration(CycleFeatureExtractor):
     """Calculates duration (seconds) of each cycle in the waveform."""
+
     def extract_feature(self, waveforms: Waveforms, name: str) -> Waveforms:
         feature = [
-            cycle[waveforms.time_column_name].values[-1] -
-            cycle[waveforms.time_column_name].values[0]
+            cycle[waveforms.time_column_name].values[-1]
+            - cycle[waveforms.time_column_name].values[0]
             for cycle in get_cycles(waveforms, name)
         ]
         waveforms.cycle_features[name][self.class_name] = np.array(feature)
@@ -69,6 +73,7 @@ class Duration(CycleFeatureExtractor):
 
 class MaximumValue(CycleFeatureExtractor):
     """Calculates maximum value of each cycle in the waveform."""
+
     def extract_feature(self, waveforms: Waveforms, name: str) -> Waveforms:
         feature = [cycle[name].max() for cycle in get_cycles(waveforms, name)]
         waveforms.cycle_features[name][self.class_name] = np.array(feature)
@@ -77,6 +82,7 @@ class MaximumValue(CycleFeatureExtractor):
 
 class MinimumValue(CycleFeatureExtractor):
     """Calculates minimum value of each cycle in the waveform."""
+
     def extract_feature(self, waveforms: Waveforms, name: str) -> Waveforms:
         feature = [cycle[name].min() for cycle in get_cycles(waveforms, name)]
         waveforms.cycle_features[name][self.class_name] = np.array(feature)
