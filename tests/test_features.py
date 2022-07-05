@@ -1,74 +1,74 @@
-import pytest
 import numpy as np
 import pandas as pd
+import pytest
+from numpy.testing import assert_equal
 
 from sidewinder import synthetic, waveforms
-from sidewinder.features import waveform, cycle
+from sidewinder.features import cycle, waveform
 
 
-@pytest.fixture(scope='function')
+@pytest.fixture(scope="function")
 def abp_data_fixture() -> pd.DataFrame:
     return synthetic.synthetic_arterial_pressure_data(
-        systolic_pressure=120.,
-        diastolic_pressure=80.,
-        heart_rate=60.,
-        n_beats_target=2.5,
-        hertz=10.
+        systolic_pressure=120.0,
+        diastolic_pressure=80.0,
+        heart_rate=60.0,
+        n_beats_target=2.3,
+        hertz=10.0,
     )
 
 
-@pytest.fixture(scope='function')
+@pytest.fixture(scope="function")
 def abp_waveforms_fixture(abp_data_fixture) -> waveforms.Waveforms:
     w = waveforms.Waveforms(abp_data_fixture)
-    w = waveform.find_troughs(w, name='pressure')
+    w = waveform.find_troughs(w, name="pressure")
     return w
 
 
 def test_find_troughs(abp_waveforms_fixture):
-    np.testing.assert_array_equal(
-        abp_waveforms_fixture.waveform_features['pressure']['troughs'],
-        np.array([0, 10, 20])
+    assert_equal(
+        abp_waveforms_fixture.waveform_features["pressure"]["troughs"],
+        np.array([0, 10, 20]),
     )
 
 
 def test_get_cycles(abp_waveforms_fixture):
-    expected = cycle.get_cycles(abp_waveforms_fixture, 'pressure')
+    expected = cycle.get_cycles(abp_waveforms_fixture, "pressure")
     assert len(expected) == 2
-    np.testing.assert_array_equal(
+    assert_equal(
         expected[0].pressure.values,
-        abp_waveforms_fixture.waveforms.pressure.values[:11]
+        abp_waveforms_fixture.waveforms.pressure.values[:11],
     )
-    np.testing.assert_array_equal(
+    assert_equal(
         expected[1].pressure.values,
-        abp_waveforms_fixture.waveforms.pressure.values[10:21]
+        abp_waveforms_fixture.waveforms.pressure.values[10:21],
     )
 
 
 class TestDuration:
     def test_extract_feature(self, abp_waveforms_fixture):
         duration = cycle.Duration()
-        w = duration.extract_feature(abp_waveforms_fixture, 'pressure')
-        np.testing.assert_array_equal(
-            w.cycle_features['pressure']['Duration'],
-            np.array([1., 1.])
+        w = duration.extract_feature(abp_waveforms_fixture, "pressure")
+        assert_equal(
+            w.cycle_features["pressure"]["Duration"], np.array([1.0, 1.0])
         )
 
 
 class TestMaximumValue:
     def test_extract_feature(self, abp_waveforms_fixture):
         max_value = cycle.MaximumValue()
-        w = max_value.extract_feature(abp_waveforms_fixture, 'pressure')
-        np.testing.assert_array_equal(
-            w.cycle_features['pressure']['MaximumValue'],
-            np.array([120., 120.])
+        w = max_value.extract_feature(abp_waveforms_fixture, "pressure")
+        assert_equal(
+            w.cycle_features["pressure"]["MaximumValue"],
+            np.array([120.0, 120.0]),
         )
 
 
 class TestMinimumValue:
     def test_extract_feature(self, abp_waveforms_fixture):
         min_value = cycle.MinimumValue()
-        w = min_value.extract_feature(abp_waveforms_fixture, 'pressure')
-        np.testing.assert_array_equal(
-            w.cycle_features['pressure']['MinimumValue'],
-            np.array([80., 80.])
+        w = min_value.extract_feature(abp_waveforms_fixture, "pressure")
+        assert_equal(
+            w.cycle_features["pressure"]["MinimumValue"],
+            np.array([80.0, 80.0]),
         )
