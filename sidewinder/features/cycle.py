@@ -126,4 +126,8 @@ class MeanNegativeFirstDifference(CycleFeatureExtractor):
 
     @staticmethod
     def _remove_zeros(array: np.array) -> np.array:
-        return array[array < 0]
+        zeros_removed = array[array < 0]
+        if zeros_removed.size > 0:
+            return zeros_removed
+        # if no negative differences, indicates poor quality waveform
+        return np.array([-np.inf])
