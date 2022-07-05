@@ -117,7 +117,7 @@ class MeanNegativeFirstDifference(CycleFeatureExtractor):
                 a_max=0,
             )
         )
-        # TODO: Standardise by sampling frequency
+        # TODO: See https://github.com/UCL-Chimera/sidewinder/issues/16
 
         waveforms.cycle_features[name][self.class_name] = np.array(feature)
         return waveforms
