@@ -107,17 +107,23 @@ class MeanNegativeFirstDifference(CycleFeatureExtractor):
     https://bit.ly/3AwtazE"""
 
     def extract_feature(self, waveforms: Waveforms, name: str) -> Waveforms:
-        feature = np.mean(
-            np.clip(
-                [
-                    np.diff(cycle[name].values, n=1, axis=0)
-                    for cycle in get_cycles(waveforms, name)
-                ],
-                a_min=None,
-                a_max=0,
+        feature = [
+            np.mean(
+                self._remove_zeros(
+                    np.clip(
+                        np.diff(cycle[name].values, n=1, axis=0),
+                        a_min=None,
+                        a_max=0,
+                    )
+                )
             )
-        )
+            for cycle in get_cycles(waveforms, name)
+        ]
         # TODO: See https://github.com/UCL-Chimera/sidewinder/issues/16
 
         waveforms.cycle_features[name][self.class_name] = np.array(feature)
         return waveforms
+
+    @staticmethod
+    def _remove_zeros(array: np.array) -> np.array:
+        return array[array < 0]
