@@ -21,7 +21,9 @@ def make_waveform_generator_from_file(filepath: str) -> interpolate.interp1d:
     """
     waveform = np.load(filepath)
     time = np.linspace(start=0, stop=1, num=waveform.size)
-    return interpolate.interp1d(time, waveform, kind="cubic")
+    return interpolate.interp1d(
+        time, waveform, kind="cubic", fill_value="extrapolate"
+    )
 
 
 def make_generator_timestamps_and_inputs(
