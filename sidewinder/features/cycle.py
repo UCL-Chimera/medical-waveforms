@@ -99,3 +99,25 @@ class MaximumMinusMinimumValue(CycleFeatureExtractor):
         ]
         waveforms.cycle_features[name][self.class_name] = np.array(feature)
         return waveforms
+
+
+class MeanNegativeFirstDifference(CycleFeatureExtractor):
+    """Calculates the mean of only the negative first differences for each cycle
+    in the waveform. This feature is equivalent to `mean_dyneg` from
+    https://bit.ly/3AwtazE"""
+
+    def extract_feature(self, waveforms: Waveforms, name: str) -> Waveforms:
+        feature = np.mean(
+            np.clip(
+                [
+                    np.diff(cycle[name].values, n=1, axis=0)
+                    for cycle in get_cycles(waveforms, name)
+                ],
+                a_min=None,
+                a_max=0,
+            )
+        )
+        # TODO: Standardise by sampling frequency
+
+        waveforms.cycle_features[name][self.class_name] = np.array(feature)
+        return waveforms
