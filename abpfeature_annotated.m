@@ -31,7 +31,13 @@ function r = abpfeature(abp,OnsetTimes, Fs)
     %       the GNU (v3 or later) public license. See license file for
     %       more information
     
-    
+    % NOTE THAT ONLY THE FOLLOWING FEATURES ARE USED DOWNSTREAM BY jSQI.m
+    % - Systolic BP
+    % - Diastolic BP
+    % - Pulse pressure
+    % - MAP
+    % - Beat duration
+    % - Mean dyneg
     
     
     if length(OnsetTimes)<30 % don't process anything if too little onsets
@@ -76,7 +82,7 @@ function r = abpfeature(abp,OnsetTimes, Fs)
     % Flattens indices
     DiasTime         = MinDomain(sub2ind(size(MinDomain),(1:BeatQty)',Dindex)); % Map offset indices Dindex to original indices
     SysTime          = MaxDomain(sub2ind(size(MaxDomain),(1:BeatQty)',Sindex)); % Map offset indices Sindex to original indices
-    
+
     %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
     % Pulse Pressure [mmHg]
     PP         = P_sys - P_dias;
