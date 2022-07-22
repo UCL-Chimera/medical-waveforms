@@ -87,11 +87,30 @@ class TestMaximumMinusMinimumValue:
 
 class TestMeanValue:
     def test_extract_feature(self, abp_waveforms_fixture):
-        mmm_value = cycle.MeanValue()
-        wf = mmm_value.extract_feature(abp_waveforms_fixture, "pressure")
+        mean_value = cycle.MeanValue()
+        wf = mean_value.extract_feature(abp_waveforms_fixture, "pressure")
         approx_expected_map = 80.0 + (120.0 - 80.0) / 3
         assert_allclose(
             wf.cycle_features["pressure"]["MeanValue"],
             np.array([approx_expected_map, approx_expected_map]),
             atol=1.0,  # allow approximation to be wrong by <1mmHg
+        )
+
+
+class TestMeanNegativeFirstDifference:
+    def test_extract_feature(self):
+        # Make simple synthetic signal where MNFD is predictable (note that it
+        #  contains zeros which will have to be removed). Note that 'time' is
+        #  ignored. See See https://github.com/UCL-Chimera/sidewinder/issues/16
+        data = pd.DataFrame({"time": [0, 1, 2, 3], "signal": [0, 0, 1, 0]})
+        wf = waveforms.Waveforms(data)
+
+        # Define manual troughs such that the data contains a single cycle
+        wf.waveform_features["signal"]["troughs"] = np.array([0, 3])
+
+        mnfd_value = cycle.MeanNegativeFirstDifference()
+        wf = mnfd_value.extract_feature(wf, "signal")
+        assert_equal(
+            wf.cycle_features["signal"]["MeanNegativeFirstDifference"],
+            np.array([-1]),
         )
