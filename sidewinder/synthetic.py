@@ -1,5 +1,6 @@
-import os
 import math
+import os
+from typing import Tuple
 
 import numpy as np
 import pandas as pd
@@ -21,14 +22,14 @@ def make_waveform_generator_from_file(filepath: str) -> interpolate.interp1d:
     """
     waveform = np.load(filepath)
     time = np.linspace(start=0, stop=1, num=waveform.size)
-    return interpolate.interp1d(time, waveform, kind='cubic')
+    return interpolate.interp1d(
+        time, waveform, kind="cubic", fill_value="extrapolate"
+    )
 
 
 def make_generator_timestamps_and_inputs(
-    cycles_per_minute: float,
-    n_cycles_target: float,
-    hertz: float
-) -> (np.ndarray, np.ndarray):
+    cycles_per_minute: float, n_cycles_target: float, hertz: float
+) -> Tuple[np.ndarray, np.ndarray]:
     """Make timestamps and corresponding inputs for a synthetic waveform
         generator function.
 
@@ -45,12 +46,16 @@ def make_generator_timestamps_and_inputs(
         Inputs. The units are standardised such that 0 is the start of the
             generated waveform and 1 is the end.
     """
-    seconds_per_cycle = 60. / cycles_per_minute
+    seconds_per_cycle = 60.0 / cycles_per_minute
     dt = 1 / hertz
     fractional_samples_per_cycle = seconds_per_cycle / dt
-    n_samples = round(fractional_samples_per_cycle * n_cycles_target)
-    n_seconds = n_samples * dt
-    n_cycles_actual = n_samples / fractional_samples_per_cycle
+
+    # Add 1 as we have a sample at time zero
+    n_samples = round(fractional_samples_per_cycle * n_cycles_target) + 1
+
+    # Minus 1 to account for the zero sample
+    n_seconds = (n_samples - 1) * dt
+    n_cycles_actual = (n_samples - 1) / fractional_samples_per_cycle
     n_cycle_starts = math.ceil(n_cycles_actual)
 
     start_times = np.zeros(n_cycle_starts)
@@ -58,11 +63,11 @@ def make_generator_timestamps_and_inputs(
         np.repeat(seconds_per_cycle, n_cycle_starts - 1)
     )
 
-    timestamps = np.linspace(0, n_seconds, n_samples, endpoint=False)
+    timestamps = np.linspace(0, n_seconds, n_samples, endpoint=True)
 
-    """`insertion_i` is the indices where `start_times` would be inserted into
-    `timestamps` to maintain order. Each element in `offsets` is the number
-    of seconds that elapse in a cycle before the first sample in that cycle."""
+    # `insertion_i` is the indices where `start_times` would be inserted into
+    #  `timestamps` to maintain order. Each element in `offsets` is the number
+    #  of seconds that elapse in a cycle before the first sample in that cycle.
     insertion_i = np.searchsorted(timestamps, start_times)
     offsets = timestamps[insertion_i] - start_times
 
@@ -72,15 +77,21 @@ def make_generator_timestamps_and_inputs(
     samples_per_cycle = samples_per_cycle.astype(int)
 
     def cycle_timestamps(cycle_i: int) -> np.ndarray:
-        return np.linspace(
-            start=0,
-            stop=(samples_per_cycle[cycle_i] - 1) / hertz,
-            num=samples_per_cycle[cycle_i]
-        ) + offsets[cycle_i]
+        return (
+            np.linspace(
+                start=0,
+                stop=(samples_per_cycle[cycle_i] - 1) / hertz,
+                num=samples_per_cycle[cycle_i],
+            )
+            + offsets[cycle_i]
+        )
 
-    inputs = np.concatenate([
-        cycle_timestamps(cycle_i) for cycle_i in range(n_cycle_starts)
-    ]) / seconds_per_cycle
+    inputs = (
+        np.concatenate(
+            [cycle_timestamps(cycle_i) for cycle_i in range(n_cycle_starts)]
+        )
+        / seconds_per_cycle
+    )
 
     return timestamps, inputs
 
@@ -90,7 +101,7 @@ def synthetic_arterial_pressure_data(
     diastolic_pressure: float,
     heart_rate: float,
     n_beats_target: float,
-    hertz: float
+    hertz: float,
 ) -> pd.DataFrame:
     """Make synthetic arterial pressure data.
 
@@ -112,13 +123,13 @@ def synthetic_arterial_pressure_data(
     timestamps, inputs = make_generator_timestamps_and_inputs(
         cycles_per_minute=heart_rate,
         n_cycles_target=n_beats_target,
-        hertz=hertz
+        hertz=hertz,
     )
     waveform_filepath = os.path.join(
         get_root_directory(),
-        'sidewinder',
-        'data',
-        'example_arterial_pressure_waveform.npy'
+        "sidewinder",
+        "data",
+        "example_arterial_pressure_waveform.npy",
     )
     generator = make_waveform_generator_from_file(waveform_filepath)
     waveform = generator(inputs)
@@ -126,7 +137,7 @@ def synthetic_arterial_pressure_data(
     # Scale
     waveform -= waveform.min()
     waveform /= waveform.max()
-    waveform *= (systolic_pressure - diastolic_pressure)
+    waveform *= systolic_pressure - diastolic_pressure
     waveform += diastolic_pressure
 
-    return pd.DataFrame({'time': timestamps, 'pressure': waveform})
+    return pd.DataFrame({"time": timestamps, "pressure": waveform})
