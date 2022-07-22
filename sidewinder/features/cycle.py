@@ -113,7 +113,7 @@ class MaximumMinusMinimumValue(CycleFeatureExtractor):
 
 class MeanNegativeFirstDifference(CycleFeatureExtractor):
     """Calculates the mean of only the negative first differences for each cycle
-    in the waveform. This feature is equivalent to `mean_dyneg` from
+    in the waveform. This feature is similar to `mean_dyneg` from
     https://bit.ly/3AwtazE"""
 
     def extract_feature(self, waveforms: Waveforms, name: str) -> Waveforms:
