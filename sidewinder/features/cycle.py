@@ -1,4 +1,5 @@
 from abc import ABC, abstractmethod
+from typing import List
 
 import numpy as np
 import pandas as pd
@@ -6,7 +7,7 @@ import pandas as pd
 from ..waveforms import Waveforms
 
 
-def get_cycles(waveforms: Waveforms, name: str) -> [pd.DataFrame]:
+def get_cycles(waveforms: Waveforms, name: str) -> List[pd.DataFrame]:
     """Makes a list of the individual cycles from a waveform. This is useful
     for per-cycle feature extraction.
 
