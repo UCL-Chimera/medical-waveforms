@@ -134,7 +134,7 @@ class MeanNegativeFirstDifference(CycleFeatureExtractor):
         return waveforms
 
     @staticmethod
-    def _remove_zeros(array: np.array) -> np.array:
+    def _remove_zeros(array: np.ndarray) -> np.ndarray:
         zeros_removed = array[array < 0]
         if zeros_removed.size > 0:
             return zeros_removed
