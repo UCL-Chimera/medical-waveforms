@@ -1,5 +1,6 @@
 import math
 import os
+from typing import Tuple
 
 import numpy as np
 import pandas as pd
@@ -28,7 +29,7 @@ def make_waveform_generator_from_file(filepath: str) -> interpolate.interp1d:
 
 def make_generator_timestamps_and_inputs(
     cycles_per_minute: float, n_cycles_target: float, hertz: float
-) -> (np.ndarray, np.ndarray):
+) -> Tuple[np.ndarray, np.ndarray]:
     """Make timestamps and corresponding inputs for a synthetic waveform
         generator function.
 
@@ -64,9 +65,9 @@ def make_generator_timestamps_and_inputs(
 
     timestamps = np.linspace(0, n_seconds, n_samples, endpoint=True)
 
-    """`insertion_i` is the indices where `start_times` would be inserted into
-    `timestamps` to maintain order. Each element in `offsets` is the number
-    of seconds that elapse in a cycle before the first sample in that cycle."""
+    # `insertion_i` is the indices where `start_times` would be inserted into
+    #  `timestamps` to maintain order. Each element in `offsets` is the number
+    #  of seconds that elapse in a cycle before the first sample in that cycle.
     insertion_i = np.searchsorted(timestamps, start_times)
     offsets = timestamps[insertion_i] - start_times
 
