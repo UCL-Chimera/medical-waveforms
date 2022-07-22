@@ -34,8 +34,6 @@ jobs:
       - name: Install dependencies (if no cache exists)
         if: steps.cached-poetry-dependencies.outputs.cache-hit != 'true'
         run: poetry install --no-interaction --no-root
-      
-      # TODO: caching
 
       # - name: Cache Poetry virtualenv
       #   uses: actions/cache@v1
