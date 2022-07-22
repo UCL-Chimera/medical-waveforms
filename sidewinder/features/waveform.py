@@ -15,7 +15,7 @@ def find_troughs(waveforms: Waveforms, name: str) -> Waveforms:
             `waveforms.waveform_features[`name`]['troughs']`
     """
     waveforms.waveforms[name] *= -1  # invert signal, so troughs become peaks
-    waveforms.waveform_features[name]['troughs'] = ampd.find_peaks(
+    waveforms.waveform_features[name]["troughs"] = ampd.find_peaks(
         waveforms.waveforms[name]
     )
     waveforms.waveforms[name] *= -1  # un-invert signal
