@@ -35,23 +35,5 @@ jobs:
         if: steps.cached-poetry-dependencies.outputs.cache-hit != 'true'
         run: poetry install --no-interaction --no-root
 
-      # - name: Cache Poetry virtualenv
-      #   uses: actions/cache@v1
-      #   id: cache
-      #   with:
-      #     path: ~/.virtualenvs
-      #     key: poetry-${{ hashFiles('**/poetry.lock') }}
-      #     restore-keys: |
-      #       poetry-${{ hashFiles('**/poetry.lock') }}
-
-      # - name: Set Poetry config
-      #   run: |
-      #     poetry config settings.virtualenvs.in-project false
-      #     poetry config settings.virtualenvs.path ~/.virtualenvs
-
-      # - name: Install dependencies
-        # run: poetry install
-        # if: steps.cache.outputs.cache-hit != 'true'
-
       - name: Run tests
         run: poetry run pytest --cov-report term-missing --cov .
