@@ -41,7 +41,7 @@ jobs:
         # if: steps.cache.outputs.cache-hit != 'true'
 
       - name: Run tests
-        run: poetry run pytest --cov . -n 2
+        run: poetry run pytest --cov .
         # run: |
         #   poetry run pytest tests/
         #   coverage report
