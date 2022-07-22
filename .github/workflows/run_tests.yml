@@ -1,0 +1,47 @@
+name: Run tests
+
+on: [push]
+# on: [pull_request]
+
+jobs:
+
+  test:
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v3
+
+      - name: Set up Python
+        uses: actions/setup-python@v4
+        with:
+          python-version: 3.10
+          # python-version: ['3.6', '3.7', '3.8', '3.9', '3.10']
+
+      - name: Install Poetry
+        uses: snok/install-poetry@v1
+      
+      # TODO: caching
+
+      # - name: Cache Poetry virtualenv
+      #   uses: actions/cache@v1
+      #   id: cache
+      #   with:
+      #     path: ~/.virtualenvs
+      #     key: poetry-${{ hashFiles('**/poetry.lock') }}
+      #     restore-keys: |
+      #       poetry-${{ hashFiles('**/poetry.lock') }}
+
+      # - name: Set Poetry config
+      #   run: |
+      #     poetry config settings.virtualenvs.in-project false
+      #     poetry config settings.virtualenvs.path ~/.virtualenvs
+
+      - name: Install dependencies
+        run: poetry install
+        # if: steps.cache.outputs.cache-hit != 'true'
+
+      - name: Run tests
+        # run: poetry run pytest --cov . -n 2
+        run: |
+          poetry run pytest tests/
+          coverage report
