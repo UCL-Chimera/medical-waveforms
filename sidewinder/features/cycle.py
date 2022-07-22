@@ -89,6 +89,15 @@ class MinimumValue(CycleFeatureExtractor):
         return waveforms
 
 
+class MeanValue(CycleFeatureExtractor):
+    """Calculates mean value of each cycle in the waveform."""
+
+    def extract_feature(self, waveforms: Waveforms, name: str) -> Waveforms:
+        feature = [cycle[name].mean() for cycle in get_cycles(waveforms, name)]
+        waveforms.cycle_features[name][self.class_name] = np.array(feature)
+        return waveforms
+
+
 class MaximumMinusMinimumValue(CycleFeatureExtractor):
     """Calculates maximum minus minimum value of each cycle in the waveform."""
 
