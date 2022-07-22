@@ -1,7 +1,7 @@
 from typing import Dict, Tuple
 
-import pandas as pd
 import numpy as np
+import pandas as pd
 
 
 class Waveforms:
@@ -45,13 +45,3 @@ class Waveforms:
         """Makes a holder for features (the features themselves haven't been
         derived yet)"""
         return {name: {} for name in self.names}
-
-
-class DummyClassForBlackTesting:
-    """A dummy class to check that the black GitHub action is working"""
-
-
-
-
-    def __init__(self, argument_with_long_name_1,argument_with_long_name_2,argument_with_long_name_3,argument_with_long_name_4):
-        pass  
