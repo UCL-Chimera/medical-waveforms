@@ -1,15 +1,15 @@
-import pytest
 import pandas as pd
+import pytest
 
 from sidewinder import waveforms
 
 
 class TestWaveforms:
-    @pytest.fixture(scope='class')
+    @pytest.fixture(scope="class")
     def example_data(self):
-        return pd.DataFrame({'time': [1, 2, 3], 'signal': [0.1, 0.4, 0.8]})
+        return pd.DataFrame({"time": [1, 2, 3], "signal": [0.1, 0.4, 0.8]})
 
-    @pytest.fixture(scope='class')
+    @pytest.fixture(scope="class")
     def example_waveforms(self, example_data):
         return waveforms.Waveforms(waveforms=example_data)
 
@@ -21,12 +21,12 @@ class TestWaveforms:
         with pytest.raises(Exception):
             waveforms.Waveforms(
                 waveforms=example_data,
-                time_column_name='a_different_time_column_name'
+                time_column_name="a_different_time_column_name",
             )
 
     def test_names(self, example_waveforms):
-        assert example_waveforms.names == ('signal',)
+        assert example_waveforms.names == ("signal",)
 
     def test_features(self, example_waveforms):
-        assert example_waveforms.waveform_features == {'signal': {}}
-        assert example_waveforms.cycle_features == {'signal': {}}
+        assert example_waveforms.waveform_features == {"signal": {}}
+        assert example_waveforms.cycle_features == {"signal": {}}
