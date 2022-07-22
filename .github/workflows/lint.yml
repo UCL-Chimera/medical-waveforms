@@ -11,3 +11,4 @@ jobs:
         with:
           options: "--check --diff --color --line-length 79"
           src: "./sidewinder"
+      - uses: isort/isort-action@master
