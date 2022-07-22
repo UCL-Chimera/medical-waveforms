@@ -1,7 +1,7 @@
 import numpy as np
 import pandas as pd
 import pytest
-from numpy.testing import assert_equal
+from numpy.testing import assert_allclose, assert_equal
 
 from sidewinder import synthetic, waveforms
 from sidewinder.features import cycle, waveform
@@ -48,18 +48,18 @@ def test_get_cycles(abp_waveforms_fixture):
 class TestDuration:
     def test_extract_feature(self, abp_waveforms_fixture):
         duration = cycle.Duration()
-        w = duration.extract_feature(abp_waveforms_fixture, "pressure")
+        wf = duration.extract_feature(abp_waveforms_fixture, "pressure")
         assert_equal(
-            w.cycle_features["pressure"]["Duration"], np.array([1.0, 1.0])
+            wf.cycle_features["pressure"]["Duration"], np.array([1.0, 1.0])
         )
 
 
 class TestMaximumValue:
     def test_extract_feature(self, abp_waveforms_fixture):
         max_value = cycle.MaximumValue()
-        w = max_value.extract_feature(abp_waveforms_fixture, "pressure")
+        wf = max_value.extract_feature(abp_waveforms_fixture, "pressure")
         assert_equal(
-            w.cycle_features["pressure"]["MaximumValue"],
+            wf.cycle_features["pressure"]["MaximumValue"],
             np.array([120.0, 120.0]),
         )
 
@@ -67,8 +67,31 @@ class TestMaximumValue:
 class TestMinimumValue:
     def test_extract_feature(self, abp_waveforms_fixture):
         min_value = cycle.MinimumValue()
-        w = min_value.extract_feature(abp_waveforms_fixture, "pressure")
+        wf = min_value.extract_feature(abp_waveforms_fixture, "pressure")
         assert_equal(
-            w.cycle_features["pressure"]["MinimumValue"],
+            wf.cycle_features["pressure"]["MinimumValue"],
             np.array([80.0, 80.0]),
+        )
+
+
+class TestMaximumMinusMinimumValue:
+    def test_extract_feature(self, abp_waveforms_fixture):
+        mmm_value = cycle.MaximumMinusMinimumValue()
+        wf = mmm_value.extract_feature(abp_waveforms_fixture, "pressure")
+        expected_pulse_pressure = 120.0 - 80.0
+        assert_equal(
+            wf.cycle_features["pressure"]["MaximumMinusMinimumValue"],
+            np.array([expected_pulse_pressure, expected_pulse_pressure]),
+        )
+
+
+class TestMeanValue:
+    def test_extract_feature(self, abp_waveforms_fixture):
+        mmm_value = cycle.MeanValue()
+        wf = mmm_value.extract_feature(abp_waveforms_fixture, "pressure")
+        approx_expected_map = 80.0 + (120.0 - 80.0) / 3
+        assert_allclose(
+            wf.cycle_features["pressure"]["MeanValue"],
+            np.array([approx_expected_map, approx_expected_map]),
+            atol=1.0,  # allow approximation to be wrong by <1mmHg
         )
