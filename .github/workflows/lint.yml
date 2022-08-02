@@ -16,5 +16,5 @@ jobs:
       
       - name: Check import ordering using isort
         uses: isort/isort-action@master
-          with:
-            configuration: "--check false"
+        with:
+          configuration: "--check false"
