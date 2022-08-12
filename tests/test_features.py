@@ -55,6 +55,17 @@ class TestDuration:
         )
 
 
+class TestCyclesPerMinute:
+    def test_extract_feature(self, abp_waveforms_fixture):
+        wf = cycle.CyclesPerMinute().extract_feature(
+            abp_waveforms_fixture, "pressure"
+        )
+        assert_equal(
+            wf.cycle_features["pressure"]["CyclesPerMinute"],
+            np.array([60.0, 60.0]),
+        )
+
+
 class TestMaximumValue:
     def test_extract_feature(self, abp_waveforms_fixture):
         wf = cycle.MaximumValue().extract_feature(

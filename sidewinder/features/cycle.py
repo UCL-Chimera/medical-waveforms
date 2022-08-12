@@ -72,6 +72,21 @@ class Duration(CycleFeatureExtractor):
         return waveforms
 
 
+class CyclesPerMinute(CycleFeatureExtractor):
+    """Calculates rate (cycles per minute) for each cycle in the waveform."""
+
+    def extract_feature(self, waveforms: Waveforms, name: str) -> Waveforms:
+        feature = [
+            cycle[waveforms.time_column_name].values[-1]
+            - cycle[waveforms.time_column_name].values[0]
+            for cycle in get_cycles(waveforms, name)
+        ]
+        waveforms.cycle_features[name][self.class_name] = 60 / np.array(
+            feature
+        )
+        return waveforms
+
+
 class MaximumValue(CycleFeatureExtractor):
     """Calculates maximum value of each cycle in the waveform."""
 
