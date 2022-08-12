@@ -6,18 +6,26 @@ Created on Sun Jul 31 17:22:06 2022
 
 """
 
+from typing import Dict, Tuple
+
 import numpy as np
+from frozendict import frozendict
 
 from sidewinder.features import cycle
 from sidewinder.waveforms import Waveforms
 
 
-def unphysbeats(waveforms: Waveforms):
-    rangeP = [20, 300]  # mmHg
-    rangeMAP = [30, 200]  # mmHg
-    rangeHR = [20, 200]  # bpm
-    rangePP = [20, np.inf]  # mmHg
-    # feature_extractor().extract_feature(wf, 'pressure')
+def unphysbeats(
+    waveforms: Waveforms,
+    cycle_thresholds: Dict[str, Tuple[float, float]] = frozendict(
+        {
+            "MinimumValue": (20.0, 300.0),  # mmHg
+            "MeanValue": (30.0, 200.0),  # mmHg
+            "CyclesPerMinute": (20.0, 200.0),  # bpm
+            "MaximumMinusMinimumValues": (20.0, np.inf),  # mmHg
+        }
+    ),
+):
     # flag unphysiological beats based on threshold
     for feature_extractor in [
         cycle.CyclesPerMinute,
@@ -37,10 +45,27 @@ def unphysbeats(waveforms: Waveforms):
     HR = waveforms.cycle_features["CyclesPerMinute"]
 
     ##Replace without defining the new variables above, if correct
-    badP = np.where(np.any(Pdias < rangeP[0] or Psys > rangeP[1]))
-    badMAP = np.where(np.any(MAP < rangeMAP[0] or MAP > rangeMAP[1]))
-    badHR = np.where(np.any(HR < rangeHR[0] or HR > rangeHR[1]))
-    badPP = np.where(np.any(PP < rangePP[0]))
+    badP = np.where(
+        np.any(
+            Pdias < cycle_thresholds["MinimumValue"][0]
+            or Psys > cycle_thresholds["MinimumValue"][1]
+        )
+    )
+    badMAP = np.where(
+        np.any(
+            MAP < cycle_thresholds["MeanValue"][0]
+            or MAP > cycle_thresholds["MeanValue"][1]
+        )
+    )
+    badHR = np.where(
+        np.any(
+            HR < cycle_thresholds["CyclesPerMinute"][0]
+            or HR > cycle_thresholds["CyclesPerMinute"][1]
+        )
+    )
+    badPP = np.where(
+        np.any(PP < cycle_thresholds["MaximumMinusMinimumValues"][0])
+    )
 
     ###First differences. Smarter way than differencing each time?
     ###Is this a pd dataframe for diff to work?
