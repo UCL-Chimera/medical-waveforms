@@ -17,49 +17,30 @@ from sidewinder.waveforms import Waveforms
 
 def unphysbeats(
     waveforms: Waveforms,
-    cycle_thresholds: Dict[str, Tuple[float, float]] = frozendict(
+    cycle_thresholds: Dict[
+        cycle.CycleFeatureExtractor, Tuple[float, float]
+    ] = frozendict(
         {
-            "Value": (20.0, 300.0),  # mmHg
-            "MeanValue": (30.0, 200.0),  # mmHg
-            "CyclesPerMinute": (20.0, 200.0),  # bpm
-            "MaximumMinusMinimumValues": (20.0, np.inf),  # mmHg
+            cycle.MinimumValue: (20.0, 200.0),  # mmHg
+            cycle.MaximumValue: (30.0, 300.0),  # mmHg
+            cycle.MeanValue: (30.0, 200.0),  # mmHg
+            cycle.CyclesPerMinute: (20.0, 200.0),  # bpm
+            cycle.MaximumMinusMinimumValue: (20.0, 250.0),  # mmHg
         }
     ),
 ):
-    # TODO: Tweak default thresholds
-    # TODO: Separate thresholds for DBP and SBP
-
     # Flag unphysiological beats based on threshold
-    for feature_extractor in [
-        cycle.CyclesPerMinute,
-        cycle.MaximumValue,
-        cycle.MinimumValue,
-        cycle.MeanValue,
-        cycle.MaximumMinusMinimumValue,
-        cycle.MeanNegativeFirstDifference,
-    ]:
-        waveforms = feature_extractor().extract_feature(waveforms, "pressure")
+    bad_cycles = {}
+    for feature_extractor, thresholds in cycle_thresholds.items():
+        fe = feature_extractor()
+        waveforms = fe.extract_feature(waveforms, "pressure")
+        bad_cycles[fe.class_name] = np.where(
+            thresholds[0]
+            > waveforms.cycle_features["pressure"][fe.class_name]
+            > thresholds[1]
+        )
 
-    # TODO: Do this is a loop
-    badP = np.where(
-        cycle_thresholds["Value"][0]
-        > waveforms.cycle_features["pressure"]["MinimumValue"]
-        > cycle_thresholds["Value"][1]
-    )
-    badMAP = np.where(
-        cycle_thresholds["MeanValue"][0]
-        > waveforms.cycle_features["pressure"]["MeanValue"]
-        > cycle_thresholds["MeanValue"][1]
-    )
-    badHR = np.where(
-        cycle_thresholds["CyclesPerMinute"][0]
-        > waveforms.cycle_features["pressure"]["CyclesPerMinute"]
-        > cycle_thresholds["CyclesPerMinute"][1]
-    )
-    badPP = np.where(
-        waveforms.cycle_features["pressure"]["MaximumMinusMinimumValue"]
-        < cycle_thresholds["MaximumMinusMinimumValues"][0]
-    )
+    raise NotImplementedError("Function needs revising from here downward")
 
     ###First differences. Smarter way than differencing each time?
     ###Is this a pd dataframe for diff to work?
