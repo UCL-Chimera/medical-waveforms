@@ -20,7 +20,7 @@ def unphysbeats(waveforms: Waveforms):
     # feature_extractor().extract_feature(wf, 'pressure')
     # flag unphysiological beats based on threshold
     for feature_extractor in [
-        cycle.Duration,
+        cycle.CyclesPerMinute,
         cycle.MaximumValue,
         cycle.MinimumValue,
         cycle.MeanValue,
@@ -30,12 +30,11 @@ def unphysbeats(waveforms: Waveforms):
         waveforms = feature_extractor().extract_feature(
             waveforms, "pressure"
         )  ###Picked up from Finn's example.
-    Pdias = waveforms["MinimumValue"]
-    Psys = waveforms["MaximumValue"]
-    MAP = waveforms["MeanValue"]
-    PP = waveforms["MaximumMinusMinimumValue"]
-    IBI = waveforms["Duration"]
-    HR = [60 / i for i in IBI]
+    Pdias = waveforms.cycle_features["MinimumValue"]
+    Psys = waveforms.cycle_features["MaximumValue"]
+    MAP = waveforms.cycle_features["MeanValue"]
+    PP = waveforms.cycle_features["MaximumMinusMinimumValue"]
+    HR = waveforms.cycle_features["CyclesPerMinute"]
 
     ##Replace without defining the new variables above, if correct
     badP = np.where(np.any(Pdias < rangeP[0] or Psys > rangeP[1]))
@@ -45,9 +44,9 @@ def unphysbeats(waveforms: Waveforms):
 
     ###First differences. Smarter way than differencing each time?
     ###Is this a pd dataframe for diff to work?
-    fd_Psys = waveforms["Maximumvalue"].diff()
-    fd_Pdias = waveforms["Minimumvalue"].diff()
-    fd_Period = waveforms["Duration"].diff()
+    fd_Psys = waveforms.cycle_features["Maximumvalue"].diff()
+    fd_Pdias = waveforms.cycle_features["Minimumvalue"].diff()
+    fd_Period = waveforms.cycle_features["Duration"].diff()
     # fd_Onset=waveforms['Onset'].diff()
     dPsys = 20
     dPdias = 20
