@@ -132,7 +132,9 @@ class TestMeanNegativeFirstDifference:
 
 
 def test_calculate_diffs(abp_waveforms_fixture):
-    wf = diffs.calculate_diffs(
+    wf = diffs.calculate_absolute_diffs(
         abp_waveforms_fixture, "pressure", cycles.Duration
     )
-    assert_equal(wf.features.diffs["pressure"]["Duration"], np.array([0.0]))
+    assert_equal(
+        wf.features.diffs["pressure"]["Duration"], np.array([0.0, 0.0])
+    )
