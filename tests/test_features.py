@@ -4,7 +4,7 @@ import pytest
 from numpy.testing import assert_allclose, assert_equal
 
 from sidewinder import synthetic, waveforms
-from sidewinder.features import cycles, waveform
+from sidewinder.features import cycles, diffs, waveform
 
 
 @pytest.fixture(scope="function")
@@ -129,3 +129,10 @@ class TestMeanNegativeFirstDifference:
             wf.features.cycles["signal"]["MeanNegativeFirstDifference"],
             np.array([-1]),
         )
+
+
+def test_calculate_diffs(abp_waveforms_fixture):
+    wf = diffs.calculate_diffs(
+        abp_waveforms_fixture, "pressure", cycles.Duration
+    )
+    assert_equal(wf.features.diffs["pressure"]["Duration"], np.array([0.0]))
