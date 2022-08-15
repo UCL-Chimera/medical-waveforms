@@ -27,7 +27,7 @@ def abp_waveforms_fixture(abp_data_fixture) -> waveforms.Waveforms:
 
 def test_find_troughs(abp_waveforms_fixture):
     assert_equal(
-        abp_waveforms_fixture.waveform_features["pressure"]["troughs"],
+        abp_waveforms_fixture.features.waveform["pressure"]["troughs"],
         np.array([0, 10, 20]),
     )
 
@@ -51,7 +51,7 @@ class TestDuration:
             abp_waveforms_fixture, "pressure"
         )
         assert_equal(
-            wf.cycle_features["pressure"]["Duration"], np.array([1.0, 1.0])
+            wf.features.cycles["pressure"]["Duration"], np.array([1.0, 1.0])
         )
 
 
@@ -61,7 +61,7 @@ class TestCyclesPerMinute:
             abp_waveforms_fixture, "pressure"
         )
         assert_equal(
-            wf.cycle_features["pressure"]["CyclesPerMinute"],
+            wf.features.cycles["pressure"]["CyclesPerMinute"],
             np.array([60.0, 60.0]),
         )
 
@@ -72,7 +72,7 @@ class TestMaximumValue:
             abp_waveforms_fixture, "pressure"
         )
         assert_equal(
-            wf.cycle_features["pressure"]["MaximumValue"],
+            wf.features.cycles["pressure"]["MaximumValue"],
             np.array([120.0, 120.0]),
         )
 
@@ -83,7 +83,7 @@ class TestMinimumValue:
             abp_waveforms_fixture, "pressure"
         )
         assert_equal(
-            wf.cycle_features["pressure"]["MinimumValue"],
+            wf.features.cycles["pressure"]["MinimumValue"],
             np.array([80.0, 80.0]),
         )
 
@@ -95,7 +95,7 @@ class TestMaximumMinusMinimumValue:
         )
         expected_pulse_pressure = 120.0 - 80.0
         assert_equal(
-            wf.cycle_features["pressure"]["MaximumMinusMinimumValue"],
+            wf.features.cycles["pressure"]["MaximumMinusMinimumValue"],
             np.array([expected_pulse_pressure, expected_pulse_pressure]),
         )
 
@@ -107,7 +107,7 @@ class TestMeanValue:
         )
         approx_expected_map = 80.0 + (120.0 - 80.0) / 3
         assert_allclose(
-            wf.cycle_features["pressure"]["MeanValue"],
+            wf.features.cycles["pressure"]["MeanValue"],
             np.array([approx_expected_map, approx_expected_map]),
             atol=1.0,  # allow approximation to be wrong by <1mmHg
         )
@@ -122,10 +122,10 @@ class TestMeanNegativeFirstDifference:
         wf = waveforms.Waveforms(data)
 
         # Define manual troughs such that the data contains a single cycle
-        wf.waveform_features["signal"]["troughs"] = np.array([0, 3])
+        wf.features.waveform["signal"]["troughs"] = np.array([0, 3])
 
         wf = cycle.MeanNegativeFirstDifference().extract_feature(wf, "signal")
         assert_equal(
-            wf.cycle_features["signal"]["MeanNegativeFirstDifference"],
+            wf.features.cycles["signal"]["MeanNegativeFirstDifference"],
             np.array([-1]),
         )

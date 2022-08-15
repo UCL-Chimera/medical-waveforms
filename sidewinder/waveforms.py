@@ -20,8 +20,7 @@ class Waveforms:
         self.time_column_name = time_column_name
         self._validate_arguments()
         self.names = self._init_names()
-        self.waveform_features = self._init_features_container()
-        self.cycle_features = self._init_features_container()
+        self.features = FeaturesContainer(self.names)
 
     def _validate_arguments(self):
         assert isinstance(
@@ -41,7 +40,23 @@ class Waveforms:
             if name is not self.time_column_name
         )
 
-    def _init_features_container(self) -> Dict[str, Dict[str, np.ndarray]]:
+
+class FeaturesContainer:
+    """Holds features of the waveform data."""
+
+    def __init__(self, waveform_names: Tuple[str, ...]):
+        """
+        Args:
+            waveform_names: Names of each of the waveform columns
+        """
+        self.waveform = self._init_features_container(waveform_names)
+        self.cycles = self._init_features_container(waveform_names)
+        self.diffs = self._init_features_container(waveform_names)
+
+    @staticmethod
+    def _init_features_container(
+        waveform_names,
+    ) -> Dict[str, Dict[str, np.ndarray]]:
         """Makes a holder for features (the features themselves haven't been
         derived yet)"""
-        return {name: {} for name in self.names}
+        return {name: {} for name in waveform_names}
