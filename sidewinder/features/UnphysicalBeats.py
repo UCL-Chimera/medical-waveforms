@@ -6,7 +6,7 @@ Created on Sun Jul 31 17:22:06 2022
 
 """
 
-from typing import Dict, Tuple
+from typing import Dict, Tuple, Type
 
 import numpy as np
 from frozendict import frozendict
@@ -18,7 +18,7 @@ from sidewinder.waveforms import Waveforms
 def unphysbeats(
     waveforms: Waveforms,
     cycle_thresholds: Dict[
-        cycles.CycleFeatureExtractor, Tuple[float, float]
+        Type[cycles.CycleFeatureExtractor], Tuple[float, float]
     ] = frozendict(
         {
             cycles.MinimumValue: (20.0, 200.0),  # mmHg
@@ -26,6 +26,7 @@ def unphysbeats(
             cycles.MeanValue: (30.0, 200.0),  # mmHg
             cycles.CyclesPerMinute: (20.0, 200.0),  # bpm
             cycles.MaximumMinusMinimumValue: (20.0, 250.0),  # mmHg
+            cycles.MeanNegativeFirstDifference: (-3.0, 0.0),
         }
     ),
 ):
