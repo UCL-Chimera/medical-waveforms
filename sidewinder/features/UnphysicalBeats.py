@@ -11,21 +11,21 @@ from typing import Dict, Tuple
 import numpy as np
 from frozendict import frozendict
 
-from sidewinder.features import cycle
+from sidewinder.features import cycles
 from sidewinder.waveforms import Waveforms
 
 
 def unphysbeats(
     waveforms: Waveforms,
     cycle_thresholds: Dict[
-        cycle.CycleFeatureExtractor, Tuple[float, float]
+        cycles.CycleFeatureExtractor, Tuple[float, float]
     ] = frozendict(
         {
-            cycle.MinimumValue: (20.0, 200.0),  # mmHg
-            cycle.MaximumValue: (30.0, 300.0),  # mmHg
-            cycle.MeanValue: (30.0, 200.0),  # mmHg
-            cycle.CyclesPerMinute: (20.0, 200.0),  # bpm
-            cycle.MaximumMinusMinimumValue: (20.0, 250.0),  # mmHg
+            cycles.MinimumValue: (20.0, 200.0),  # mmHg
+            cycles.MaximumValue: (30.0, 300.0),  # mmHg
+            cycles.MeanValue: (30.0, 200.0),  # mmHg
+            cycles.CyclesPerMinute: (20.0, 200.0),  # bpm
+            cycles.MaximumMinusMinimumValue: (20.0, 250.0),  # mmHg
         }
     ),
 ):
