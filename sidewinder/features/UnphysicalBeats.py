@@ -34,19 +34,21 @@ def unphysbeats(
     for feature_extractor, thresholds in cycle_thresholds.items():
         fe = feature_extractor()
         waveforms = fe.extract_feature(waveforms, "pressure")
-        bad_cycles[fe.class_name] = np.where(
+        bad_cycles[fe.class_name] = (
             thresholds[0]
-            > waveforms.cycle_features["pressure"][fe.class_name]
+            > waveforms.features.cycles["pressure"][fe.class_name]
             > thresholds[1]
         )
+
+    return bad_cycles
 
     raise NotImplementedError("Function needs revising from here downward")
 
     ###First differences. Smarter way than differencing each time?
     ###Is this a pd dataframe for diff to work?
-    fd_Psys = waveforms.cycle_features["Maximumvalue"].diff()
-    fd_Pdias = waveforms.cycle_features["Minimumvalue"].diff()
-    fd_Period = waveforms.cycle_features["Duration"].diff()
+    fd_Psys = waveforms.features.cycles["Maximumvalue"].diff()
+    fd_Pdias = waveforms.features.cycles["Minimumvalue"].diff()
+    fd_Period = waveforms.features.cycles["Duration"].diff()
     # fd_Onset=waveforms['Onset'].diff()
     dPsys = 20
     dPdias = 20
