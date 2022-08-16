@@ -1,52 +1,70 @@
-from dataclasses import dataclass
+from dataclasses import dataclass, field
 from typing import Dict, Tuple, Type
 
 import pandas as pd
-from frozendict import frozendict
+# from frozendict import frozendict
 
 from sidewinder.features import cycles, diffs
 from sidewinder.waveforms import Waveforms
 
-
+# ycle_thresholds: Dict[
+#         Type[cycles.CycleFeatureExtractor], Tuple[float, float]
+#     ] = frozendict(
+#         {
+#             cycles.MinimumValue: (20.0, 200.0),  # mmHg
+#             cycles.MaximumValue: (30.0, 300.0),  # mmHg
+#             cycles.MeanValue: (30.0, 200.0),  # mmHg
+#             cycles.CyclesPerMinute: (20.0, 200.0),  # bpm
+#             cycles.MaximumMinusMinimumValue: (20.0, 250.0),  # mmHg
+#             cycles.MeanNegativeFirstDifference: (-3.0, 0.0),
+#         }
+#     ),
+#     diff_thresholds: Dict[
+#         Type[cycles.CycleFeatureExtractor], float
+#     ] = frozendict(
+#         {
+#             cycles.MinimumValue: 20.0,  # mmHg
+#             cycles.MaximumValue: 20.0,  # mmHg
+#             cycles.Duration: 0.5,  # seconds
+#         }
+#     ),
 @dataclass
 class CycleThreshold:
-    checker: Type[cycles.CycleFeatureExtractor]
+    # checker: Type[cycles.CycleFeatureExtractor]
     min: float
     max: float
 
 
 @dataclass
 class DiffThreshold:
-    checker: Type[cycles.CycleFeatureExtractor]
-    threshold: float
-    absolute: bool
+    # checker: Type[cycles.CycleFeatureExtractor]
+    absolute: bool = True
+    threshold: float = 20
 
+@dataclass
+class CheckThresholds:
+    #TODO look at using default_factory() to build in different defaults
+    
+    @dataclass
+    class Cycles:
+        min: CycleThreshold = CycleThreshold(20, 300) 
+        max = CycleThreshold(30, 300) 
+        mean = CycleThreshold(30, 200) 
+        Hz = CycleThreshold(20, 200) 
+        diff = CycleThreshold(20, 250) 
+        nfd = CycleThreshold(-3, 0) 
+    
+    
+    class Thresholds:
+        min: DiffThreshold()
+        max: DiffThreshold()
+        duration: DiffThreshold(threshold=0.5)
 
 # TODO: These are defaults for adult arterial pressure - move them elsewhere
 def check_cycles(
     waveforms: Waveforms,
     name: str,
-    cycle_thresholds: Dict[
-        Type[cycles.CycleFeatureExtractor], Tuple[float, float]
-    ] = frozendict(
-        {
-            cycles.MinimumValue: (20.0, 200.0),  # mmHg
-            cycles.MaximumValue: (30.0, 300.0),  # mmHg
-            cycles.MeanValue: (30.0, 200.0),  # mmHg
-            cycles.CyclesPerMinute: (20.0, 200.0),  # bpm
-            cycles.MaximumMinusMinimumValue: (20.0, 250.0),  # mmHg
-            cycles.MeanNegativeFirstDifference: (-3.0, 0.0),
-        }
-    ),
-    diff_thresholds: Dict[
-        Type[cycles.CycleFeatureExtractor], float
-    ] = frozendict(
-        {
-            cycles.MinimumValue: 20.0,  # mmHg
-            cycles.MaximumValue: 20.0,  # mmHg
-            cycles.Duration: 0.5,  # seconds
-        }
-    ),
+    cycle_thresholds: CheckThresholds = CheckThresholds()
 ) -> pd.DataFrame:
     checked = {}
 
