@@ -9,6 +9,20 @@ from sidewinder.waveforms import Waveforms
 
 
 class CycleCheck(BaseModel):
+    """A signal quality check to run on a feature of each cycle in a signal.
+
+    Args:
+        feature: The class that extracts the feature for each cycle
+        min: The minimum acceptable value of the feature in order for the check
+            to pass for that cycle
+        max: The maximum acceptable value of the feature in order for the check
+            to pass for that cycle
+        units: The units of `min` and `max` (optional and just for
+            documentation purposes)
+        description: A description of the check (optional and just for
+            documentation purposes)
+    """
+
     feature: Type[cycles.CycleFeatureExtractor]
     min: float = -np.inf
     max: float = np.inf
@@ -17,6 +31,19 @@ class CycleCheck(BaseModel):
 
 
 class DiffCheck(BaseModel):
+    """A signal quality check to run on the absolute differences between
+        features of adjacent cycles in a signal.
+
+    Args:
+        feature: The class that extracts the absolute differences feature
+        threshold: The minimum acceptable value of absolute difference in order
+            for the check to pass for that cycle
+        units: The units of `threshold` (optional and just for documentation
+            purposes)
+        description: A description of the check (optional and just for
+            documentation purposes)
+    """
+
     feature: Type[cycles.CycleFeatureExtractor]
     threshold: float
     units: Optional[str] = None
@@ -24,6 +51,8 @@ class DiffCheck(BaseModel):
 
 
 class ArterialPressureChecks(BaseModel):
+    """Some preset checks for use with adult human arterial pressure signals."""
+
     diastolic_pressure: Optional[CycleCheck] = CycleCheck(
         feature=cycles.MinimumValue, min=20.0, max=200.0, units="mmHg"
     )
@@ -70,6 +99,21 @@ class ArterialPressureChecks(BaseModel):
 def check_cycles(
     waveforms: Waveforms, name: str, checks: Type[BaseModel]
 ) -> pd.DataFrame:
+    """Runs signal quality checks for each cycle in a signal.
+
+    Args:
+        waveforms: `sidewinder.waveforms.Waveforms` instance holding your data
+        name: Name of column in `waveforms` to perform signal quality checks on
+        checks: The checks to run. This should subclass pydantic's `BaseModel`
+            and should have attributes which are instances of `CycleCheck`
+            and/or `DiffCheck`, each of which defines a check.
+
+    Returns:
+        DataFrame with one row for each cycle in the signal. Has one Boolean
+            column for each check, which is True if the check passed for that
+            cycle, else False. Also has an 'all' column which is positive if
+            all checks passed for that cycle.
+    """
     checked = {}
 
     for check_name, check in vars(checks).items():
