@@ -12,6 +12,7 @@ scipy = "^1.7.3"
 matplotlib = "^3.5.1"
 pyampd = "^0.0.1"
 
+
 [tool.poetry.dev-dependencies]
 pytest = "^6.2.5"
 ipykernel = "^6.6.0"
@@ -19,6 +20,8 @@ statsmodels = "^0.13.1"
 mypy = "^0.971"
 black = "^22.6.0"
 pytest-cov = "^3.0.0"
+pre-commit = "^2.20.0"
+isort = "^5.10.1"
 
 [build-system]
 requires = ["poetry-core>=1.0.0"]

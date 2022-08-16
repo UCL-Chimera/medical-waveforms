@@ -47,19 +47,13 @@ def test_get_cycles(abp_waveforms_fixture):
 
 class TestDuration:
     def test_extract_feature(self, abp_waveforms_fixture):
-        wf = cycle.Duration().extract_feature(
-            abp_waveforms_fixture, "pressure"
-        )
-        assert_equal(
-            wf.cycle_features["pressure"]["Duration"], np.array([1.0, 1.0])
-        )
+        wf = cycle.Duration().extract_feature(abp_waveforms_fixture, "pressure")
+        assert_equal(wf.cycle_features["pressure"]["Duration"], np.array([1.0, 1.0]))
 
 
 class TestMaximumValue:
     def test_extract_feature(self, abp_waveforms_fixture):
-        wf = cycle.MaximumValue().extract_feature(
-            abp_waveforms_fixture, "pressure"
-        )
+        wf = cycle.MaximumValue().extract_feature(abp_waveforms_fixture, "pressure")
         assert_equal(
             wf.cycle_features["pressure"]["MaximumValue"],
             np.array([120.0, 120.0]),
@@ -68,9 +62,7 @@ class TestMaximumValue:
 
 class TestMinimumValue:
     def test_extract_feature(self, abp_waveforms_fixture):
-        wf = cycle.MinimumValue().extract_feature(
-            abp_waveforms_fixture, "pressure"
-        )
+        wf = cycle.MinimumValue().extract_feature(abp_waveforms_fixture, "pressure")
         assert_equal(
             wf.cycle_features["pressure"]["MinimumValue"],
             np.array([80.0, 80.0]),
@@ -91,9 +83,7 @@ class TestMaximumMinusMinimumValue:
 
 class TestMeanValue:
     def test_extract_feature(self, abp_waveforms_fixture):
-        wf = cycle.MeanValue().extract_feature(
-            abp_waveforms_fixture, "pressure"
-        )
+        wf = cycle.MeanValue().extract_feature(abp_waveforms_fixture, "pressure")
         approx_expected_map = 80.0 + (120.0 - 80.0) / 3
         assert_allclose(
             wf.cycle_features["pressure"]["MeanValue"],

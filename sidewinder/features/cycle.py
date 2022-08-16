@@ -27,9 +27,7 @@ def get_cycles(waveforms: Waveforms, name: str) -> List[pd.DataFrame]:
             ] : waveforms.waveform_features[name]["troughs"][cycle_i + 1]
             + 1
         ]
-        for cycle_i in range(
-            waveforms.waveform_features[name]["troughs"].size - 1
-        )
+        for cycle_i in range(waveforms.waveform_features[name]["troughs"].size - 1)
     ]
 
 

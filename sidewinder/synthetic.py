@@ -1,6 +1,6 @@
 import math
 import os
-from typing import Tuple
+from typing import List, Tuple
 
 import numpy as np
 import pandas as pd
@@ -22,9 +22,7 @@ def make_waveform_generator_from_file(filepath: str) -> interpolate.interp1d:
     """
     waveform = np.load(filepath)
     time = np.linspace(start=0, stop=1, num=waveform.size)
-    return interpolate.interp1d(
-        time, waveform, kind="cubic", fill_value="extrapolate"
-    )
+    return interpolate.interp1d(time, waveform, kind="cubic", fill_value="extrapolate")
 
 
 def make_generator_timestamps_and_inputs(
@@ -59,9 +57,7 @@ def make_generator_timestamps_and_inputs(
     n_cycle_starts = math.ceil(n_cycles_actual)
 
     start_times = np.zeros(n_cycle_starts)
-    start_times[1:] = np.cumsum(
-        np.repeat(seconds_per_cycle, n_cycle_starts - 1)
-    )
+    start_times[1:] = np.cumsum(np.repeat(seconds_per_cycle, n_cycle_starts - 1))
 
     timestamps = np.linspace(0, n_seconds, n_samples, endpoint=True)
 
@@ -87,9 +83,7 @@ def make_generator_timestamps_and_inputs(
         )
 
     inputs = (
-        np.concatenate(
-            [cycle_timestamps(cycle_i) for cycle_i in range(n_cycle_starts)]
-        )
+        np.concatenate([cycle_timestamps(cycle_i) for cycle_i in range(n_cycle_starts)])
         / seconds_per_cycle
     )
 
