@@ -1,3 +1,4 @@
+from dataclasses import dataclass
 from typing import Dict, Tuple, Type
 
 import pandas as pd
@@ -5,6 +6,20 @@ from frozendict import frozendict
 
 from sidewinder.features import cycles, diffs
 from sidewinder.waveforms import Waveforms
+
+
+@dataclass
+class CycleThreshold:
+    checker: Type[cycles.CycleFeatureExtractor]
+    min: float
+    max: float
+
+
+@dataclass
+class DiffThreshold:
+    checker: Type[cycles.CycleFeatureExtractor]
+    threshold: float
+    absolute: bool
 
 
 # TODO: These are defaults for adult arterial pressure - move them elsewhere
