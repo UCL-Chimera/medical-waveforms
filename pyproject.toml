@@ -13,7 +13,6 @@ matplotlib = "^3.5.1"
 pyampd = "^0.0.1"
 pydantic = "^1.9.2"
 
-
 [tool.poetry.dev-dependencies]
 pytest = "^6.2.5"
 ipykernel = "^6.6.0"

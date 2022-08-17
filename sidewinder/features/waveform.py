@@ -12,10 +12,10 @@ def find_troughs(waveforms: Waveforms, name: str) -> Waveforms:
 
     Returns:
         `waveforms` with trough indices added to
-            `waveforms.waveform_features[`name`]['troughs']`
+            `waveforms.features.waveform[`name`]['troughs']`
     """
     waveforms.waveforms[name] *= -1  # invert signal, so troughs become peaks
-    waveforms.waveform_features[name]["troughs"] = ampd.find_peaks(
+    waveforms.features.waveform[name]["troughs"] = ampd.find_peaks(
         waveforms.waveforms[name]
     )
     waveforms.waveforms[name] *= -1  # un-invert signal
