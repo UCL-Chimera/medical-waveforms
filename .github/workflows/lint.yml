@@ -11,10 +11,8 @@ jobs:
       - name: Check code formatting using Black
         uses: psf/black@stable
         with:
-          options: "--diff --color --line-length 79"
+          options: "--check --diff --color --line-length 79"
           src: "./sidewinder"
       
       - name: Check import ordering using isort
         uses: isort/isort-action@master
-        with:
-          configuration: "--diff"
