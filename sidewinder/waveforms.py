@@ -7,7 +7,9 @@ import pandas as pd
 class Waveforms:
     """Holds waveforms for downstream processing."""
 
-    def __init__(self, waveforms: pd.DataFrame, time_column_name: str = "time"):
+    def __init__(
+        self, waveforms: pd.DataFrame, time_column_name: str = "time"
+    ):
         """
         Args:
             waveforms: Contains a timestamps column (in seconds) and one or more
@@ -26,14 +28,17 @@ class Waveforms:
             self.waveforms, pd.DataFrame
         ), "`waveforms` must be a pandas DataFrame"
         assert self.time_column_name in self.waveforms.columns, (
-            "`waveforms` must contain a column called " f"'{self.time_column_name}'"
+            "`waveforms` must contain a column called "
+            f"'{self.time_column_name}'"
         )
 
     def _init_names(self) -> Tuple[str, ...]:
         """Makes a tuple of names of the waveform-containing columns in
         self.waveforms"""
         return tuple(
-            name for name in self.waveforms.columns if name is not self.time_column_name
+            name
+            for name in self.waveforms.columns
+            if name is not self.time_column_name
         )
 
     def _init_features_container(self) -> Dict[str, Dict[str, np.ndarray]]:
