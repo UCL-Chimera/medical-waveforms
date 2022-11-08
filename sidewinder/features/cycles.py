@@ -22,12 +22,14 @@ def get_cycles(waveforms: Waveforms, name: str) -> List[pd.DataFrame]:
     """
     return [
         waveforms.waveforms.iloc[
-            waveforms.waveform_features[name]["troughs"][
+            waveforms.features.waveform[name]["troughs"][
                 cycle_i
-            ] : waveforms.waveform_features[name]["troughs"][cycle_i + 1]
+            ] : waveforms.features.waveform[name]["troughs"][cycle_i + 1]
             + 1
         ]
-        for cycle_i in range(waveforms.waveform_features[name]["troughs"].size - 1)
+        for cycle_i in range(
+            waveforms.features.waveform[name]["troughs"].size - 1
+        )
     ]
 
 
@@ -51,7 +53,7 @@ class CycleFeatureExtractor(ABC):
 
         Returns:
             `waveforms` with new np.ndarray of shape (n_cycles,) at
-                `waveforms.cycle_features[`name`][`self.class_name`]`
+                `waveforms.features.cycle[`name`][`self.class_name`]`
                 where each element is the feature for the corresponding cycle
         """
         pass
@@ -66,7 +68,22 @@ class Duration(CycleFeatureExtractor):
             - cycle[waveforms.time_column_name].values[0]
             for cycle in get_cycles(waveforms, name)
         ]
-        waveforms.cycle_features[name][self.class_name] = np.array(feature)
+        waveforms.features.cycles[name][self.class_name] = np.array(feature)
+        return waveforms
+
+
+class CyclesPerMinute(CycleFeatureExtractor):
+    """Calculates rate (cycles per minute) for each cycle in the waveform."""
+
+    def extract_feature(self, waveforms: Waveforms, name: str) -> Waveforms:
+        feature = [
+            cycle[waveforms.time_column_name].values[-1]
+            - cycle[waveforms.time_column_name].values[0]
+            for cycle in get_cycles(waveforms, name)
+        ]
+        waveforms.features.cycles[name][self.class_name] = 60 / np.array(
+            feature
+        )
         return waveforms
 
 
@@ -75,7 +92,7 @@ class MaximumValue(CycleFeatureExtractor):
 
     def extract_feature(self, waveforms: Waveforms, name: str) -> Waveforms:
         feature = [cycle[name].max() for cycle in get_cycles(waveforms, name)]
-        waveforms.cycle_features[name][self.class_name] = np.array(feature)
+        waveforms.features.cycles[name][self.class_name] = np.array(feature)
         return waveforms
 
 
@@ -84,7 +101,7 @@ class MinimumValue(CycleFeatureExtractor):
 
     def extract_feature(self, waveforms: Waveforms, name: str) -> Waveforms:
         feature = [cycle[name].min() for cycle in get_cycles(waveforms, name)]
-        waveforms.cycle_features[name][self.class_name] = np.array(feature)
+        waveforms.features.cycles[name][self.class_name] = np.array(feature)
         return waveforms
 
 
@@ -96,7 +113,7 @@ class MaximumMinusMinimumValue(CycleFeatureExtractor):
             cycle[name].max() - cycle[name].min()
             for cycle in get_cycles(waveforms, name)
         ]
-        waveforms.cycle_features[name][self.class_name] = np.array(feature)
+        waveforms.features.cycles[name][self.class_name] = np.array(feature)
         return waveforms
 
 
@@ -105,7 +122,7 @@ class MeanValue(CycleFeatureExtractor):
 
     def extract_feature(self, waveforms: Waveforms, name: str) -> Waveforms:
         feature = [cycle[name].mean() for cycle in get_cycles(waveforms, name)]
-        waveforms.cycle_features[name][self.class_name] = np.array(feature)
+        waveforms.features.cycles[name][self.class_name] = np.array(feature)
         return waveforms
 
 
@@ -129,7 +146,7 @@ class MeanNegativeFirstDifference(CycleFeatureExtractor):
         ]
         # TODO: See https://github.com/UCL-Chimera/sidewinder/issues/16
 
-        waveforms.cycle_features[name][self.class_name] = np.array(feature)
+        waveforms.features.cycles[name][self.class_name] = np.array(feature)
         return waveforms
 
     @staticmethod

@@ -24,12 +24,12 @@ def find_troughs(
 
     Returns:
         `waveforms` with trough indices added to
-            `waveforms.waveform_features[`name`]['troughs']`
+            `waveforms.features.waveform[`name`]['troughs']`
     """
     waveforms.waveforms[name] *= -1  # invert signal, so troughs become peaks
 
     try:
-        waveforms.waveform_features[name]["troughs"] = ampd.find_peaks(
+        waveforms.features.waveform[name]["troughs"] = ampd.find_peaks(
             x=waveforms.waveforms[name], scale=scale
         )
     except MemoryError:
