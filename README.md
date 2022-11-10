@@ -11,6 +11,17 @@ This package currently focuses on:
 - Rule-based signal quality assessment
 
 
+## Installation
+
+Install with:
+
+```
+pip install medical_waveforms
+```
+
+The package is tested on Python 3.7 and above.
+
+
 ## Getting started
 
 See the [tutorial notebook](examples/tutorial.ipynb) for a general introduction to using the package.
