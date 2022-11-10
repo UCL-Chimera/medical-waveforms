@@ -12,7 +12,7 @@ def find_troughs(
     """Finds indices of troughs in a waveform.
 
     Args:
-        waveforms: `sidewinder.waveforms.Waveforms` instance holding your data
+        waveforms: `medical_waveforms.waveforms.Waveforms` instance holding your data
         name: Name of column in `waveforms` to find troughs in
         scale : The maximum scale window size is (2 * scale + 1) during trough
             finding. Higher values require more memory. If None, sets `scale`

@@ -14,7 +14,7 @@ def get_cycles(waveforms: Waveforms, name: str) -> List[pd.DataFrame]:
     Each cycle includes the troughs at its start and end.
 
     Args:
-        waveforms: `sidewinder.waveforms.Waveforms` instance holding your data
+        waveforms: `medical_waveforms.waveforms.Waveforms` instance holding your data
         name: Name of column in `waveforms` to get cycles for
 
     Returns:
@@ -47,7 +47,7 @@ class CycleFeatureExtractor(ABC):
         """Extracts a feature for each cycle in a waveform.
 
         Args:
-            waveforms: `sidewinder.waveforms.Waveforms` instance holding your
+            waveforms: `medical_waveforms.waveforms.Waveforms` instance holding your
                 data
             name: Name of column in `waveforms` to extract feature from
 
@@ -144,7 +144,7 @@ class MeanNegativeFirstDifference(CycleFeatureExtractor):
             )
             for cycle in get_cycles(waveforms, name)
         ]
-        # TODO: See https://github.com/UCL-Chimera/sidewinder/issues/16
+        # TODO: See https://github.com/UCL-Chimera/medical-waveforms/issues/16
 
         waveforms.features.cycles[name][self.class_name] = np.array(feature)
         return waveforms
