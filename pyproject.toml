@@ -1,8 +1,13 @@
 [tool.poetry]
-name = "sidewinder"
+name = "medical-waveforms"
 version = "0.1.0"
-description = "Physiological waveform processing"
-authors = ["Your Name <you@example.com>"]
+description = "Preprocessing and analysis of physiological waveforms"
+authors = [
+    "Finneas Catling <f.catling@imperial.ac.uk>",
+    "Sandip Varkey George <example@email.com>",
+    "Manuel Teixeira Cabeleira <example@email.com>",
+    "Jakob Mathiszig-Lee <example@email.com>",
+]
 
 [tool.poetry.dependencies]
 python = ">=3.8,<3.11"

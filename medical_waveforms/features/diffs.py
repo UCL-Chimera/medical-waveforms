@@ -19,7 +19,7 @@ def calculate_absolute_diffs(
     as always has first element 0.0
 
     Args:
-        waveforms: `sidewinder.waveforms.Waveforms` instance holding your
+        waveforms: `medical_waveforms.waveforms.Waveforms` instance holding your
             data
         name: Name of column in `waveforms` to extract feature from
         feature_extractor: Extractor class for the cycle-level feature you want

@@ -4,8 +4,8 @@ import pandas as pd
 import pytest
 from pydantic import BaseModel
 
-from sidewinder import quality, synthetic, waveforms
-from sidewinder.features import cycles, waveform
+from medical_waveforms import quality, synthetic, waveforms
+from medical_waveforms.features import cycles, waveform
 
 
 class TestArterialPressureChecks:

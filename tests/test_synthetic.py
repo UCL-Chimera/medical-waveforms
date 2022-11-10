@@ -5,13 +5,13 @@ import pandas as pd
 from numpy.testing import assert_equal
 from scipy import interpolate
 
-from sidewinder import synthetic, utils
+from medical_waveforms import synthetic, utils
 
 
 def test_make_waveform_generator_from_file():
     waveform_filepath = os.path.join(
         utils.get_root_directory(),
-        "sidewinder",
+        "medical_waveforms",
         "data",
         "example_arterial_pressure_waveform.npy",
     )

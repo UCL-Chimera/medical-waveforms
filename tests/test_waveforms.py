@@ -3,7 +3,7 @@ import wave
 import pandas as pd
 import pytest
 
-from sidewinder import waveforms
+from medical_waveforms import waveforms
 
 
 class TestWaveforms:

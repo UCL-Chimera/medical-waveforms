@@ -3,8 +3,8 @@ import pandas as pd
 import pytest
 from numpy.testing import assert_allclose, assert_equal
 
-from sidewinder import synthetic, waveforms
-from sidewinder.features import cycles, diffs, waveform
+from medical_waveforms import synthetic, waveforms
+from medical_waveforms.features import cycles, diffs, waveform
 
 
 @pytest.fixture(scope="function")
@@ -117,7 +117,7 @@ class TestMeanNegativeFirstDifference:
     def test_extract_feature(self):
         # Make simple synthetic signal where MNFD is predictable (note that it
         #  contains zeros which will have to be removed). Note that 'time' is
-        #  ignored. See See https://github.com/UCL-Chimera/sidewinder/issues/16
+        #  ignored. See See https://github.com/UCL-Chimera/medical-waveforms/issues/16
         data = pd.DataFrame({"time": [0, 1, 2, 3], "signal": [0, 0, 1, 0]})
         wf = waveforms.Waveforms(data)
 

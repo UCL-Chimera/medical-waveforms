@@ -4,8 +4,8 @@ import numpy as np
 import pandas as pd
 from pydantic import BaseModel, Extra
 
-from sidewinder.features import cycles, diffs
-from sidewinder.waveforms import Waveforms
+from medical_waveforms.features import cycles, diffs
+from medical_waveforms.waveforms import Waveforms
 
 
 class CycleCheck(BaseModel):
@@ -102,7 +102,7 @@ def check_cycles(
     """Runs signal quality checks for each cycle in a signal.
 
     Args:
-        waveforms: `sidewinder.waveforms.Waveforms` instance holding your data
+        waveforms: `medical_waveforms.waveforms.Waveforms` instance holding your data
         name: Name of column in `waveforms` to perform signal quality checks on
         checks: The checks to run. This should subclass pydantic's `BaseModel`
             and should have attributes which are instances of `CycleCheck`

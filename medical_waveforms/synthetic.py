@@ -127,7 +127,7 @@ def synthetic_arterial_pressure_data(
     )
     waveform_filepath = os.path.join(
         get_root_directory(),
-        "sidewinder",
+        "medical_waveforms",
         "data",
         "example_arterial_pressure_waveform.npy",
     )
