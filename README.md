@@ -24,16 +24,16 @@ The package is tested on Python 3.7 and above.
 
 ## Getting started
 
-See the [tutorial notebook](examples/tutorial.ipynb) for a general introduction to using the package.
+See the [tutorial notebook](https://github.com/UCL-Chimera/medical-waveforms/blob/main/examples/tutorial.ipynb) for a general introduction to using the package.
 
-The [signal quality assessment notebook](examples/signal_quality.ipynb) demonstrates customisation of the signal quality assessment process.
+The [signal quality assessment notebook](https://github.com/UCL-Chimera/medical-waveforms/blob/main/examples/signal_quality.ipynb) demonstrates customisation of the signal quality assessment process.
 
 These tutorials currently focus on arterial blood pressure waveforms, but can be adapted to other physiological waveforms.
 
 
 ## Contributing to this project
 
-Contributions are very welcome! Please see [CONTRIBUTING.md](./CONTRIBUTING.md) to get started.
+Contributions are very welcome! Please see [CONTRIBUTING.md](https://github.com/UCL-Chimera/medical-waveforms/blob/main/CONTRIBUTING.md) to get started.
 
 
 ## Acknowledgements
