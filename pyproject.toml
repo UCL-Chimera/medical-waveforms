@@ -21,7 +21,7 @@ pyampd = "^0.0.1"
 pydantic = "^1.9.2"
 
 [tool.poetry.dev-dependencies]
-pytest = "^6.2.5"
+pytest = "^7.2.0"
 ipykernel = "^6.6.0"
 statsmodels = "^0.13.1"
 mypy = "^0.971"
