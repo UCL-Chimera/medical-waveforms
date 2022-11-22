@@ -16,7 +16,7 @@ This package currently focuses on:
 Install with:
 
 ```
-pip install medical_waveforms
+pip install medical-waveforms
 ```
 
 The package is tested on Python 3.7 and above.
