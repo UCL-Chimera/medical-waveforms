@@ -1,6 +1,6 @@
 [tool.poetry]
 name = "medical-waveforms"
-version = "0.1.4"
+version = "0.1.5"
 description = "Preprocessing and analysis of physiological waveforms"
 repository = "https://github.com/UCL-Chimera/medical-waveforms"
 authors = [
