@@ -19,7 +19,7 @@ Install with:
 pip install medical-waveforms
 ```
 
-The package is tested on Python 3.7 and above.
+The package is tested on Python 3.8 - 3.11.
 
 
 ## Getting started
